@@ -16,8 +16,6 @@ class Router
         self::ROUTE_END_FILE_BASED_VIEW,
         self::ROUTE_END_CALLBACK];
 
-
-
     public static function getInstance()
     {
         if (self::$instance === null) {
@@ -48,25 +46,27 @@ class Router
     }
 
     protected $file_based_views_root_path = null;
-    protected $project_root_path = null;
+    protected $project_root_path          = null;
 
     /**
      * method for setting the root path for file-based views. It's used at include in the "route" method
      * @param mixed $path
      * @return void
      */
-    public function setFileBasedViewsRootPath($path) {
+    public function setFileBasedViewsRootPath($path)
+    {
         $this->file_based_views_root_path = $path;
-    } 
+    }
 
     /**
      * method for setting the root path for the project using Sobo_PhpRouter. It's used at include in the "route" method
      * @param mixed $path
      * @return void
      */
-    public function setProjectRootPath($path) {
+    public function setProjectRootPath($path)
+    {
         $this->project_root_path = $path;
-    } 
+    }
 
     /**
      * sets which route ends are allowed; it will be enforced at routing in route()
@@ -184,10 +184,11 @@ class Router
             if (! strpos($path_to_include, '.php')) {
                 $path_to_include .= '.php';
             }
-            if (! str_starts_with($path_to_include, DIRECTORY_SEPARATOR)) {
-                if(isset($this->file_based_views_root_path) && ($this->file_based_views_root_path != ''))  { 
+
+            if ($path_to_include[0] != DIRECTORY_SEPARATOR) { // we are using a relative path
+                if (isset($this->file_based_views_root_path) && ($this->file_based_views_root_path != '')) {
                     $path_to_include = rtrim($this->file_based_views_root_path, '/') . "/$path_to_include";
-                } elseif(isset($this->project_root_path) && ($this->project_root_path != ''))  { 
+                } elseif (isset($this->project_root_path) && ($this->project_root_path != '')) {
                     $path_to_include = rtrim($this->file_based_views_root_path, '/') . "/$path_to_include";
                 } else {
                     $path_to_include = rtrim(__DIR__, '/') . "/$path_to_include";

@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 // ##################################################
 
 $router = Router::getInstance();
-$router->setFileBasedViewsRootPath(rtrim(__DIR__,'/'));
+$router->setFileBasedViewsRootPath(rtrim(__DIR__, '/'));
 
 // Static GET
 // In the URL -> http://localhost

@@ -163,9 +163,9 @@ $res_orig = do_test_cases($test_cases_orig, $host_orig);
 $res_sobo = do_test_cases($test_cases_sobo, $host_sobo);
 
 if ($res_orig['all_passed']) {
-  echo "\n======> For orig, ALL tests ({$res_orig['no_passed']}/{$res_orig['no_total']}) passed.\n";
+    echo "\n======> For orig, ALL tests ({$res_orig['no_passed']}/{$res_orig['no_total']}) passed.\n";
 } else {
-  echo "\n======> For orig, ({$res_orig['no_passed']}/{$res_orig['no_total']}) passed OK, but {$res_orig['no_failed']} failed.\n";
+    echo "\n======> For orig, ({$res_orig['no_passed']}/{$res_orig['no_total']}) passed OK, but {$res_orig['no_failed']} failed.\n";
 }
 
 if ($res_sobo['all_passed']) {
@@ -173,4 +173,3 @@ if ($res_sobo['all_passed']) {
 } else {
     echo "\n======> For sobo, ({$res_sobo['no_passed']}/{$res_sobo['no_total']}) passed OK, but {$res_sobo['no_failed']} failed.\n";
 }
-

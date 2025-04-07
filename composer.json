@@ -1,0 +1,28 @@
+{
+    "name": "krzysobo/sobo_phprouter",
+    "description": "Sobo_PhpRouter is a Secure router for PHP application with XSS and CSRF based on PhpRouter",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4"
+    },    
+    "autoload": {
+        "psr-4": {
+            "Sobo_PhpRouter": "src/sobo_phprouter"
+        }
+    },
+    "authors": [
+        {
+            "name": "Krzysztof Sobolewski",
+            "email": "krzysztof.sobolewski@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/krzysobo/sobo_phprouter"
+        }
+    ]    
+}
+
+
