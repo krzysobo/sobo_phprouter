@@ -18,34 +18,71 @@ function put($route, $path_to_include)
 		route($route, $path_to_include);
 	}
 }
+
+/**
+ * route for the PATCH method
+ * @param mixed $route
+ * @param mixed $path_to_include
+ * @return void
+ */
 function patch($route, $path_to_include)
 {
 	if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
 		route($route, $path_to_include);
 	}
 }
-function delete($route, $path_to_include)
+
+/**
+ * route for the DELETE method
+ * @param mixed $route
+ * @param mixed $path_to_include
+ * @return void
+ */
+function del($route, $path_to_include)
 {
 	if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
 		route($route, $path_to_include);
 	}
 }
+
+/**
+ * http-method-independent route
+ * @param mixed $route
+ * @param mixed $path_to_include
+ * @return void
+ */
 function any($route, $path_to_include)
 {
 	route($route, $path_to_include);
 }
+
+/**
+ * do the routing
+ * @param mixed $route
+ * @param mixed $path_to_include
+ * @return void
+ */
 function route($route, $path_to_include)
 {
 	$callback = $path_to_include;
+
+	// it's a file-based view/api point, so define the proper path_to_include:
 	if (!is_callable($callback)) {
 		if (!strpos($path_to_include, '.php')) {
 			$path_to_include .= '.php';
 		}
+
+		if (!str_starts_with($path_to_include, DIRECTORY_SEPARATOR)) {
+			$path_to_include = rtrim(__DIR__, '/')."/$path_to_include";
+		}
 	}
+
+	// 404 - include the template and quit
 	if ($route == "/404") {
-		include_once __DIR__ . "/$path_to_include";
+		include_once $path_to_include;
 		exit();
 	}
+
 	$request_url = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
 	$request_url = rtrim($request_url, '/');
 	$request_url = strtok($request_url, '?');
@@ -59,12 +96,14 @@ function route($route, $path_to_include)
 			call_user_func_array($callback, []);
 			exit();
 		}
-		include_once __DIR__ . "/$path_to_include";
+		include_once $path_to_include;
 		exit();
 	}
+
 	if (count($route_parts) != count($request_url_parts)) {
 		return;
 	}
+
 	$parameters = [];
 	for ($__i__ = 0; $__i__ < count($route_parts); $__i__++) {
 		$route_part = $route_parts[$__i__];
@@ -76,12 +115,14 @@ function route($route, $path_to_include)
 			return;
 		}
 	}
+
 	// Callback function
 	if (is_callable($callback)) {
 		call_user_func_array($callback, $parameters);
 		exit();
 	}
-	include_once __DIR__ . "/$path_to_include";
+	
+	include_once $path_to_include;
 	exit();
 }
 function out($text)
