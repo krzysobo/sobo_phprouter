@@ -248,6 +248,7 @@ class Router
         if (is_callable($callback)) {
             call_user_func_array($callback, $parameters);
             $this->callAfterCallbackIfDefined();
+            return;
         }
 
         include_once $path_to_include;
