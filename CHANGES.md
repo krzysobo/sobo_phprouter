@@ -8,3 +8,13 @@
     - the orignal PhpRouter used `__DIR__` to include file-based views in the route() function. This is a major flaw, since it precludes passing full paths and assumes that the router engine and routes are in the same directory. After my changes, it only uses `__DIR__` if the path does not start with DIRECTORY_SEPARATOR.
     - Test views locations have been changed. All test code has been moved to samples, and views have been placed in two hierarchies: samples/api and samples/views.
 
+## Version 1.0.1
+- removed the outdated handling of 404 in Sobo_PhpRouter (Router.php)
+- replaced "exit()" after callbacks with doAfterCallback() method. 
+    - the doAfterCallBack() method calls 
+
+- added the after-callback handling: 
+    ```
+    public Router::setAfterCallbackCallable($cb: callable, $cb_params: array)
+    protected Router::callAfterCallbackIfDefined()
+    ```

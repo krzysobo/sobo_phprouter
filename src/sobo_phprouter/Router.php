@@ -16,6 +16,11 @@ class Router
         self::ROUTE_END_FILE_BASED_VIEW,
         self::ROUTE_END_CALLBACK];
 
+    protected $file_based_views_root_path     = null;
+    protected $project_root_path              = null;
+    protected $after_callback_callable        = null;
+    protected $after_callback_callable_params = [];
+
     public static function getInstance()
     {
         if (self::$instance === null) {
@@ -45,9 +50,6 @@ class Router
         throw new \Exception("One does not simply clone a singleton!");
     }
 
-    protected $file_based_views_root_path = null;
-    protected $project_root_path          = null;
-
     /**
      * method for setting the root path for file-based views. It's used at include in the "route" method
      * @param mixed $path
@@ -76,6 +78,12 @@ class Router
     public function setAllowedRouteEnds($allowed_route_ends)
     {
         $this->allowed_route_ends = $allowed_route_ends;
+    }
+
+    public function setAfterCallbackCallable($callable, $params = [])
+    {
+        $this->after_callback_callable        = $callable;
+        $this->after_callback_callable_params = $params;
     }
 
     /**
@@ -196,12 +204,6 @@ class Router
             }
         }
 
-        // 404 - include the template and quit
-        if ($route == "/404") {
-            include_once $path_to_include;
-            exit();
-        }
-
         $request_url       = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
         $request_url       = rtrim($request_url, '/');
         $request_url       = strtok($request_url, '?');
@@ -216,7 +218,8 @@ class Router
             // Callback function
             if (is_callable($callback)) {
                 call_user_func_array($callback, []);
-                exit();
+                $this->callAfterCallbackIfDefined();
+                return;
             }
             include_once $path_to_include;
             exit();
@@ -244,7 +247,7 @@ class Router
         // Callback function
         if (is_callable($callback)) {
             call_user_func_array($callback, $parameters);
-            exit();
+            $this->callAfterCallbackIfDefined();
         }
 
         include_once $path_to_include;
@@ -298,5 +301,20 @@ class Router
     protected function is_route_end_allowed($route_end)
     {
         return (in_array($route_end, $this->allowed_route_ends));
+    }
+
+    protected function callAfterCallbackIfDefined()
+    {
+        if (isset($this->after_callback_callable) &&
+            is_callable($this->after_callback_callable)) {
+            if (isset($this->after_callback_callable_params) &&
+                is_array($this->after_callback_callable_params) &&
+                ! empty($this->after_callback_callable_params)) {
+                call_user_func_array($this->after_callback_callable,
+                    $this->after_callback_callable_params);
+            } else {
+                call_user_func_array($this->after_callback_callable, []);
+            }
+        }
     }
 }
