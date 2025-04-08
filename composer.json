@@ -3,6 +3,7 @@
     "description": "Sobo_PhpRouter is a Secure router for PHP application with XSS and CSRF based on PhpRouter",
     "type": "library",
     "license": "MIT",
+    "version": "1.0.0",
     "require": {
         "php": ">=7.4"
     },    
